@@ -7,6 +7,7 @@ import {
     useTranslation as useTranslationOrg,
 } from "react-i18next";
 import { fallbackLng, getOptions } from "./settings";
+import {isClient} from "@/utils/is-client";
 
 i18next
     .use(initReactI18next)
@@ -20,7 +21,7 @@ i18next
 
 export function useTranslation(ns?: string[] | string, options: any = {}) {
     const savedLng = cookies.get("language") ?? 'auto';
-    const lng = 'auto' === savedLng ? navigator.language : savedLng ?? fallbackLng;
+    const lng = 'auto' === savedLng ? isClient() ? navigator.language : savedLng : savedLng ?? fallbackLng;
     if (i18next.resolvedLanguage !== lng) i18next.changeLanguage(lng);
     return useTranslationOrg(ns, options);
 }
