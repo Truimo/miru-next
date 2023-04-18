@@ -1,6 +1,6 @@
 "use client";
 import { useTranslation } from "@/app/i18n";
-import { languages } from "@/app/i18n/settings";
+import { languages, fallbackLng } from "@/app/i18n/settings";
 import { useRootStore } from "@/context/root-context";
 import { ChangeEvent } from "react";
 import Input from "./Input";
@@ -29,7 +29,8 @@ export default function GeneralTab() {
 
     const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
         settingsStore.setSetting("language", e.target.value);
-        i18n.changeLanguage(e.target.value === 'auto' ? navigator.language : e.target.value);
+        const lng = e.target.value === 'auto' ? languages.includes(navigator.language) ? navigator.language : fallbackLng : e.target.value;
+        i18n.changeLanguage(lng);
     };
 
     const themeOptions = [
