@@ -45,7 +45,9 @@ export default function Result({
 
     useEffect(() => {
         if (isFetchingNextPage) {
-            smoothScrollTo(window.scrollY + window.outerHeight * .5, 520);
+            setTimeout(() => {
+                smoothScrollTo(window.scrollY + window.outerHeight * .5, 520);
+            }, 2e2);
         }
     }, [isFetchingNextPage]);
 
