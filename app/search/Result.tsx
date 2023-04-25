@@ -7,6 +7,7 @@ import { Extension } from "@/extension/extension";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useTranslation } from "@/app/i18n";
+import { useEffect } from "react";
 
 export default function Result({
     extension,
@@ -41,6 +42,12 @@ export default function Result({
             return pages.length + 1;
         },
     });
+
+    useEffect(() => {
+        if (isFetchingNextPage) {
+            smoothScrollTo(window.scrollY + window.outerHeight * .5, 520);
+        }
+    }, [isFetchingNextPage]);
 
     if (isLoading) {
         return (
@@ -109,4 +116,22 @@ export default function Result({
             </div>
         </div>
     );
+}
+
+function smoothScrollTo(targetPosition: number, duration: number) {
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    const startTime = performance.now();
+    function ease(t: number) {
+        return t * t;
+    }
+    function scroll(timestamp: number) {
+        const elapsed = timestamp - startTime;
+        const progress = elapsed / duration;
+        window.scrollTo(0, startPosition + distance * ease(progress));
+        if (elapsed < duration) {
+            window.requestAnimationFrame(scroll);
+        }
+    }
+    window.requestAnimationFrame(scroll);
 }
